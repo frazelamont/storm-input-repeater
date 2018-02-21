@@ -3,3 +3,8 @@ export const KEY_CODES = {
 };
 
 export const TRIGGER_EVENTS = ['click', 'keydown' ];
+
+export const DATA_ATTRIBUTES = {
+    INPUT_ID: 'data-input-id',
+    NAME_BASE: 'data-input-name-base'
+};
