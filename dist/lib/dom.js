@@ -21,3 +21,9 @@ export const updateAttributes = (node, attributes) => {
     for(let key in attributes) node.setAttribute(key, attributes[key]);
     return node;
 };
+
+export const clonesFromDOM = nodes => nodes.map(node => ({
+        container: node,
+        input: node.firstElementChild,
+        button: node.lastElementChild
+    }));

@@ -1,28 +1,29 @@
 import { KEY_CODES, TRIGGER_EVENTS } from './constants';
 import Store from './store';
 import Reducers from './reducers';
-import { h, updateAttributes } from './dom';
+import { h, updateAttributes, clonesFromDOM } from './dom';
+
+const removeInput = function(){
+    let clone = Store.getState().clones.reduce((acc, curr) => {
+        if(curr.button === this) acc = curr;
+        return acc;
+    }, false);
+
+    Store.update(Reducers.deleteInput, clone, [
+        () => { clone.container.parentNode.removeChild(clone.container); },
+        () => {
+            Store.getState().clones.forEach((clone, i) => {
+                updateAttributes(clone.input, {
+                    name: Store.getState().settings.name(Store.getState().name, i + 1),
+                    id:  Store.getState().settings.id(Store.getState().name, i + 1)
+                })
+            });
+        }
+    ]);
+};
 
 const addInput = () => {
-    const remove = function(){
-            //remove DOM node
-            let clone = Store.getState().clones.reduce((acc, curr) => {
-                if(curr.button === this) acc = curr;
-                return acc;
-            }, false);
-            Store.update(Reducers.deleteInput, clone, [
-                () => { clone.container.parentNode.removeChild(clone.container); },
-                () => {
-                    Store.getState().clones.forEach((clone, i) => {
-                        updateAttributes(clone.input, {
-                            name: Store.getState().settings.name(Store.getState().name, i + 1),
-                            id:  Store.getState().settings.id(Store.getState().name, i + 1)
-                        })
-                    });
-                }
-            ]);
-        },
-        node = h(Object.assign({}, 
+    const node = h(Object.assign({}, 
                     Store.getState().settings.container,
                     {
                         children: [
@@ -33,8 +34,8 @@ const addInput = () => {
                             }),
                             h(Object.assign({}, Store.getState().settings.deleteButton, {
                                 attributes: Object.assign({}, Store.getState().settings.deleteButton.attributes, {
-                                    onclick: remove,
-                                    onkeyup(e){ if(!e.keyCode || e.keyCode === KEY_CODES.ENTER) remove.call(this); }
+                                    onclick: removeInput,
+                                    onkeyup(e){ if(!e.keyCode || e.keyCode === KEY_CODES.ENTER) removeInput.call(this); }
                                 })
                             }))
                         ]
@@ -58,15 +59,24 @@ export default (node, settings) => {
         settings,
         label: document.querySelector(`[for=${node.getAttribute('data-input')}`).innerText,
         input: document.getElementById(node.getAttribute('data-input')),
-        name: node.getAttribute('data-input-name')
+        name: node.getAttribute('data-input-name'),
+        clones: document.querySelector(settings.serverRenderedSelector) ? clonesFromDOM([].slice.call(document.querySelectorAll(settings.serverRenderedSelector))) : []
     });
 
     TRIGGER_EVENTS.forEach(ev => {
         Store.getState().button.addEventListener(ev, e => {
             if(!e.keyCode || e.keyCode === KEY_CODES.ENTER) addInput();
         })
+        if(Store.getState().clones.length > 0){
+            Store.getState().clones.forEach(clone => {
+                clone.button.addEventListener(ev, e => {
+                    if(!e.keyCode || e.keyCode === KEY_CODES.ENTER) removeInput.call(clone.button);
+                });
+            });
+        }
     });
 
+    
     return {
         addInput
     }

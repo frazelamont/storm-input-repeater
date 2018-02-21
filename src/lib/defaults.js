@@ -1,4 +1,5 @@
 export default {
+    serverRenderedSelector: '.js-input__clone-item',
     deleteButton: { 
         type: 'div',
         attributes: { role: 'button', class: 'repeater__delete', tabindex: 0 },
