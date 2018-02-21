@@ -1,3 +1,4 @@
+import defaults from './lib/defaults';
 import factory from './lib';
 
 const init = (sel, opts) => {
@@ -5,7 +6,7 @@ const init = (sel, opts) => {
 
 	if(!els.length) return console.warn('No input clone buttons found');
     
-	return els.map(el => Object.create(factory(el)));
+	return els.map(el => Object.create(factory(el, Object.assign({}, defaults, opts))));
 };
 
 export default { init };
