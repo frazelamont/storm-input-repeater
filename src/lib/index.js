@@ -1,4 +1,4 @@
-import { KEY_CODES, TRIGGER_EVENTS } from './constants';
+import { KEY_CODES, TRIGGER_EVENTS, DATA_ATTRIBUTES } from './constants';
 import Store from './store';
 import Reducers from './reducers';
 import { h, updateAttributes, clonesFromDOM } from './dom';
@@ -57,9 +57,9 @@ export default (node, settings) => {
     Store.update(Reducers.setInitialState, {
         button: node,
         settings,
-        label: document.querySelector(`[for=${node.getAttribute('data-input')}`).innerText,
-        input: document.getElementById(node.getAttribute('data-input')),
-        name: node.getAttribute('data-input-name'),
+        label: document.querySelector(`[for=${node.getAttribute(DATA_ATTRIBUTES.INPUT_ID)}`).innerText,
+        input: document.getElementById(node.getAttribute(DATA_ATTRIBUTES.INPUT_ID)),
+        name: node.getAttribute(DATA_ATTRIBUTES.NAME_BASE),
         clones: document.querySelector(settings.serverRenderedSelector) ? clonesFromDOM([].slice.call(document.querySelectorAll(settings.serverRenderedSelector))) : []
     });
 
