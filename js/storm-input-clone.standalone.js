@@ -1,6 +1,6 @@
 /**
  * @name storm-input-clone: Copies a text input 
- * @version 0.1.0: Wed, 21 Feb 2018 17:19:47 GMT
+ * @version 0.1.0: Wed, 21 Feb 2018 17:39:59 GMT
  * @author stormid
  * @license MIT
  */
@@ -27,6 +27,7 @@ Object.defineProperty(exports, "__esModule", {
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var defaults = {
+    serverRenderedSelector: '.js-input__clone-item',
     deleteButton: {
         type: 'div',
         attributes: { role: 'button', class: 'repeater__delete', tabindex: 0 },
@@ -104,36 +105,47 @@ var updateAttributes = function updateAttributes(node, attributes) {
     }return node;
 };
 
-var addInput = function addInput() {
-    var remove = function remove() {
-        var _this = this;
+var clonesFromDOM = function clonesFromDOM(nodes) {
+    return nodes.map(function (node) {
+        return {
+            container: node,
+            input: node.firstElementChild,
+            button: node.lastElementChild
+        };
+    });
+};
 
-        //remove DOM node
-        var clone = Store.getState().clones.reduce(function (acc, curr) {
-            if (curr.button === _this) acc = curr;
-            return acc;
-        }, false);
-        Store.update(Reducers.deleteInput, clone, [function () {
-            clone.container.parentNode.removeChild(clone.container);
-        }, function () {
-            Store.getState().clones.forEach(function (clone, i) {
-                updateAttributes(clone.input, {
-                    name: Store.getState().settings.name(Store.getState().name, i + 1),
-                    id: Store.getState().settings.id(Store.getState().name, i + 1)
-                });
+var removeInput = function removeInput() {
+    var _this = this;
+
+    var clone = Store.getState().clones.reduce(function (acc, curr) {
+        if (curr.button === _this) acc = curr;
+        return acc;
+    }, false);
+
+    Store.update(Reducers.deleteInput, clone, [function () {
+        clone.container.parentNode.removeChild(clone.container);
+    }, function () {
+        Store.getState().clones.forEach(function (clone, i) {
+            updateAttributes(clone.input, {
+                name: Store.getState().settings.name(Store.getState().name, i + 1),
+                id: Store.getState().settings.id(Store.getState().name, i + 1)
             });
-        }]);
-    },
-        node = h(Object.assign({}, Store.getState().settings.container, {
+        });
+    }]);
+};
+
+var addInput = function addInput() {
+    var node = h(Object.assign({}, Store.getState().settings.container, {
         children: [updateAttributes(Store.getState().input.cloneNode(true), {
             name: Store.getState().settings.name(Store.getState().name, Store.getState().clones.length + 1),
             id: Store.getState().settings.id(Store.getState().name, Store.getState().clones.length + 1),
             'aria-label': Store.getState().label
         }), h(Object.assign({}, Store.getState().settings.deleteButton, {
             attributes: Object.assign({}, Store.getState().settings.deleteButton.attributes, {
-                onclick: remove,
+                onclick: removeInput,
                 onkeyup: function onkeyup(e) {
-                    if (!e.keyCode || e.keyCode === KEY_CODES.ENTER) remove.call(this);
+                    if (!e.keyCode || e.keyCode === KEY_CODES.ENTER) removeInput.call(this);
                 }
             })
         }))]
@@ -156,13 +168,21 @@ var factory = function factory(node, settings) {
         settings: settings,
         label: document.querySelector('[for=' + node.getAttribute('data-input')).innerText,
         input: document.getElementById(node.getAttribute('data-input')),
-        name: node.getAttribute('data-input-name')
+        name: node.getAttribute('data-input-name'),
+        clones: document.querySelector(settings.serverRenderedSelector) ? clonesFromDOM([].slice.call(document.querySelectorAll(settings.serverRenderedSelector))) : []
     });
 
     TRIGGER_EVENTS.forEach(function (ev) {
         Store.getState().button.addEventListener(ev, function (e) {
             if (!e.keyCode || e.keyCode === KEY_CODES.ENTER) addInput();
         });
+        if (Store.getState().clones.length > 0) {
+            Store.getState().clones.forEach(function (clone) {
+                clone.button.addEventListener(ev, function (e) {
+                    if (!e.keyCode || e.keyCode === KEY_CODES.ENTER) removeInput.call(clone.button);
+                });
+            });
+        }
     });
 
     return {
