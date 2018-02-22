@@ -1,6 +1,6 @@
 /**
  * @name storm-input-clone: Copies a text input 
- * @version 0.1.0: Wed, 21 Feb 2018 19:35:42 GMT
+ * @version 0.1.0: Thu, 22 Feb 2018 08:46:59 GMT
  * @author stormid
  * @license MIT
  */
@@ -166,12 +166,10 @@ var addInput = function addInput() {
 };
 
 var factory = function factory(node, settings) {
-    //construct state from DOM on first load
-
     Store.update(Reducers.setInitialState, {
         button: node,
         settings: settings,
-        label: document.querySelector('[for=' + node.getAttribute(DATA_ATTRIBUTES.INPUT_ID)).innerText,
+        label: document.querySelector('[for="' + node.getAttribute(DATA_ATTRIBUTES.INPUT_ID) + '"]').innerText || '',
         input: document.getElementById(node.getAttribute(DATA_ATTRIBUTES.INPUT_ID)),
         name: node.getAttribute(DATA_ATTRIBUTES.NAME_BASE),
         clones: document.querySelector(settings.serverRenderedSelector) ? clonesFromDOM([].slice.call(document.querySelectorAll(settings.serverRenderedSelector))) : []
