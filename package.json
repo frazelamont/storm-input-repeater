@@ -1,22 +1,25 @@
 {
-  "name": "storm-input-clone",
+  "name": "storm-input-repeater",
   "version": "0.1.1",
-  "description": "Copies a text input ",
+  "description": "For cloning and managing repeating fields",
   "author": "stormid",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mjbp/storm-input-clone.git"
+    "url": "https://github.com/mjbp/storm-input-repeater.git"
   },
   "bugs": {
-    "url": "https://github.com/mjbp/storm-input-clone/issues"
+    "url": "https://github.com/mjbp/storm-input-repeater/issues"
   },
   "main": "dist/index.js",
-  "browser": "dist/storm-input-clone.standalone.js",
+  "browser": "dist/storm-input-repeater.standalone.js",
   "keywords": [
     "stormid",
     "form",
-    "component"
+    "component",
+    "input",
+    "clone",
+    "repeater"
   ],
   "scripts": {
     "build": "node_modules/.bin/gulp build",

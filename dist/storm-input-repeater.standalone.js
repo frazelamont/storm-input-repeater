@@ -1,6 +1,6 @@
 /**
- * @name storm-input-clone: Copies a text input 
- * @version 0.1.0: Thu, 22 Feb 2018 08:46:59 GMT
+ * @name storm-input-repeater: For cloning and managing repeating fields
+ * @version 0.1.1: Thu, 22 Feb 2018 10:45:08 GMT
  * @author stormid
  * @license MIT
  */
@@ -14,7 +14,7 @@
        module.exports = mod.exports.default
    } else {
        factory(mod.exports);
-       root.StormInputClone = mod.exports.default
+       root.StormInputRepeater = mod.exports.default
    }
 
 }(this, function(exports) {
@@ -64,7 +64,7 @@ var Store = {
         var effects = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
 
         this.state = reducer(this.state, nextState);
-        console.log(this.state);
+        //console.log(this.state);
         if (effects.length > 0) effects.forEach(function (effect) {
             effect();
         });

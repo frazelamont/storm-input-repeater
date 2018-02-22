@@ -4,7 +4,7 @@ export default {
     },
     update(reducer, nextState, effects = []){ 
         this.state = reducer(this.state, nextState);
-        console.log(this.state);
+        //console.log(this.state);
         if(effects.length > 0) effects.forEach(effect => { effect() });
     },
     getState() { return this.state }
