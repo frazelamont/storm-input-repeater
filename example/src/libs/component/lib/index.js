@@ -52,12 +52,10 @@ const addInput = () => {
 };
 
 export default (node, settings) => {
-    //construct state from DOM on first load
-
     Store.update(Reducers.setInitialState, {
         button: node,
         settings,
-        label: document.querySelector(`[for=${node.getAttribute(DATA_ATTRIBUTES.INPUT_ID)}`).innerText,
+        label: document.querySelector(`[for="${node.getAttribute(DATA_ATTRIBUTES.INPUT_ID)}"]`).innerText || '',
         input: document.getElementById(node.getAttribute(DATA_ATTRIBUTES.INPUT_ID)),
         name: node.getAttribute(DATA_ATTRIBUTES.NAME_BASE),
         clones: document.querySelector(settings.serverRenderedSelector) ? clonesFromDOM([].slice.call(document.querySelectorAll(settings.serverRenderedSelector))) : []
