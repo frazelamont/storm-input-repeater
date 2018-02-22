@@ -16,7 +16,6 @@ HTML
 ```
 
 JS
-```
 either using es6 import
 ```
 import InputRepeater from 'storm-input-repeater';
@@ -31,7 +30,7 @@ Load('/content/js/async/storm-input-repeater.standalone.js')
     .then(() => {
         InputRepeater.init('.js-input__clone');
     });
-
+```
 ## Options
 ```
 {
@@ -55,7 +54,7 @@ InputRepeater.init('.js-input__clone', {
     name(name, index){ return `${name}--${index}` },
     id(name, index){ return `${name}__${index}`; }
 });
-
+```
 ## Browser support
 This is module has both es6 and es5 distributions. The es6 version should be used in a workflow that transpiles.
 
