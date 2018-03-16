@@ -6,7 +6,7 @@ const init = (sel, opts) => {
 
 	if(!els.length) return console.warn('No input clone buttons found');
     
-	return els.map(el => Object.create(factory(el, Object.assign({}, defaults, opts))));
+	return els.map(el => Object.assign(factory(el, Object.assign({}, defaults, opts))));
 };
 
 export default { init };

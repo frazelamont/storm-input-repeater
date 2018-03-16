@@ -6,5 +6,6 @@ export const TRIGGER_EVENTS = ['click', 'keydown' ];
 
 export const DATA_ATTRIBUTES = {
     INPUT_ID: 'data-input-id',
+    ALPHA_INPUT: 'data-alpha-input',
     NAME_BASE: 'data-input-name-base'
 };
