@@ -1,4 +1,4 @@
-export default {
+export default () => ({
     state: {
         clones: []
     },
@@ -8,4 +8,4 @@ export default {
         if(effects.length > 0) effects.forEach(effect => { effect() });
     },
     getState() { return this.state }
-};
+});
