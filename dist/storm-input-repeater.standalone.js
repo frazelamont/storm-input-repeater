@@ -1,6 +1,6 @@
 /**
  * @name storm-input-repeater: For cloning and managing repeating fields
- * @version 0.1.1: Fri, 16 Mar 2018 17:08:31 GMT
+ * @version 0.1.1: Mon, 19 Mar 2018 10:24:27 GMT
  * @author stormid
  * @license MIT
  */
